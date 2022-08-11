@@ -18,6 +18,7 @@ import time
 from typing import Dict, Optional, Any, List, Tuple, Callable
 
 import numpy as np
+import openworld
 import torch
 import torch.profiler as profiler
 from omegaconf import DictConfig, OmegaConf
