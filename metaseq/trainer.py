@@ -762,19 +762,21 @@ class Trainer(object):
                 # way that avoids CPU/device transfers in case sample_size is a GPU or
                 # TPU object. The assumption is that the gradient itself is also 0.
 
-            with torch.autograd.profiler.record_function("clip-grads"):
-                # clip grads
-                grad_norm = self.clip_grad_norm(
-                    self.cfg.optimization.clip_norm,
-                    self.cfg.optimization.clip_norm_type,
-                    self.cfg.optimization.skip_gradient_update_on_clip_norm,
-                )
+            # TODO(akadian): bring this back in
+            grad_norm = None
+            # with torch.autograd.profiler.record_function("clip-grads"):
+            #     # clip grads
+            #     grad_norm = self.clip_grad_norm(
+            #         self.cfg.optimization.clip_norm,
+            #         self.cfg.optimization.clip_norm_type,
+            #         self.cfg.optimization.skip_gradient_update_on_clip_norm,
+            #     )
 
-            # check that grad norms are consistent across workers
-            self._check_grad_norms(grad_norm)
-            if not torch.isfinite(grad_norm).all():
-                # check local gradnorm single GPU case, trigger NanDetector
-                raise FloatingPointError("gradients are Nan/Inf")
+            # # check that grad norms are consistent across workers
+            # self._check_grad_norms(grad_norm)
+            # if not torch.isfinite(grad_norm).all():
+            #     # check local gradnorm single GPU case, trigger NanDetector
+            #     raise FloatingPointError("gradients are Nan/Inf")
 
             with torch.autograd.profiler.record_function("optimizer"):
                 # take an optimization step
